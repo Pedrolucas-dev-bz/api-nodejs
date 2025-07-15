@@ -1,45 +1,56 @@
 const db = require('./db');
-const { cadastrarProduto: cadastrarProdutoService } = require('./services/produtosService');
 
-
-   function buscarProdutoPorId(id) {
-  return new Promise((aceito, rejeitado) => {
+function buscarProdutoPorId(id) {
+  return new Promise((resolve, reject) => {
     db.query('SELECT * FROM Produtos WHERE id = ?', [id], (error, resultado) => {
       if (error) {
-        rejeitado(error);
+        reject(error);
         return;
       }
 
       if (resultado.length > 0) {
-        aceito(resultado[0]);
+        resolve(resultado[0]);
       } else {
-        aceito(null);
+        resolve(null);
       }
     });
   });
 }
 
-
- 
-  function cadastrarProduto(dadosProduto) {
-  return new Promise((aceito, rejeitado) => {
+function cadastrarProduto(dadosProduto) {
+  return new Promise((resolve, reject) => {
     const sql = 'INSERT INTO Produtos (nome, preco) VALUES (?, ?)';
     db.query(sql, [dadosProduto.nome, dadosProduto.preco], (error, resultado) => {
       if (error) {
-        rejeitado(error);
+        reject(error);
         return;
       }
 
       if (resultado.affectedRows > 0) {
-        aceito({ id: resultado.insertId, ...dadosProduto });
+        resolve({ id: resultado.insertId, ...dadosProduto });
       } else {
-        aceito(null);
+        resolve(null);
       }
+    });
+  });
+}
+
+function atualizarProduto(id, nome, preco) {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE Produtos SET nome = ?, preco = ? WHERE id = ?';
+    db.query(sql, [nome, preco, id], (error, resultado) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(resultado);
     });
   });
 }
 
 module.exports = {
   buscarProdutoPorId,
-  cadastrarProduto
+  cadastrarProduto,
+  atualizarProduto
 };
+
