@@ -31,10 +31,17 @@ async function atualizarProduto(id, nome, preco) {
   };
 }
 
+async function buscarProdutos() {
+  const produtos = await repository.buscarProdutos();
+  return produtos;
+}
+
+
 module.exports = {
   buscarProdutoPorId,
   cadastrarProduto,
-  atualizarProduto
+  atualizarProduto,
+  buscarProdutos
 };
 
 

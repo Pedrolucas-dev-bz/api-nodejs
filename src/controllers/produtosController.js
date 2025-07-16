@@ -35,8 +35,25 @@ async function atualizarProdutoController(req, res) {
   }
 }
 
+async function buscarProdutosController(req, res) {
+  let json = { error: '', result: [] };
+
+  const produtos = await service.buscarProdutos();
+
+  for (let i in produtos) {
+    json.result.push({
+      nome: produtos[i].nome,
+      preco: produtos[i].preco
+    });
+  }
+
+  res.json(json);
+}
+
+
 module.exports = {
   buscarProdutoController,
   cadastrarProdutoController,
-  atualizarProdutoController
+  atualizarProdutoController,
+  buscarProdutosController
 };

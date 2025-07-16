@@ -1,4 +1,5 @@
 const db = require('./db');
+const service = require('./services/produtosService');
 
 function buscarProdutoPorId(id) {
   return new Promise((resolve, reject) => {
@@ -48,9 +49,23 @@ function atualizarProduto(id, nome, preco) {
   });
 }
 
+ function buscarProdutos() {
+  return new Promise((aceito, rejeitado) => {
+    db.query('SELECT * FROM Produtos', (error, results) => {
+      if (error) {
+        rejeitado(error);
+        return;
+      }
+      aceito(results);
+    });
+  });
+}
+
+
 module.exports = {
   buscarProdutoPorId,
   cadastrarProduto,
-  atualizarProduto
+  atualizarProduto,
+  buscarProdutos
 };
 
